@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sevilla 2026 — Xtoros</title>
+  <style>
+    body{font-family:system-ui;margin:0;background:#fff;color:#111}
+    header{padding:20px;border-bottom:1px solid #ddd}
+    main{max-width:1100px;margin:auto;padding:20px}
+    .car{position:relative;aspect-ratio:16/10;border:1px solid #ddd;border-radius:14px;overflow:hidden}
+    .car img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:.2s}
+    .car img.active{opacity:1}
+    button{padding:10px 14px;border:1px solid #ddd;background:#fff;border-radius:10px;cursor:pointer}
+    .controls{display:flex;gap:10px;margin-top:12px}
+  </style>
+</head>
+<body>
+<header><a href="../index.html">← Volver</a></header>
+<main>
+  <h1>Sevilla 2026</h1>
+
+  <div class="car" id="car">
+    <img src="../img/sevilla-2026/foto1.jpg" class="active" alt="">
+    <img src="../img/sevilla-2026/foto2.jpg" alt="">
+    <img src="../img/sevilla-2026/foto3.jpg" alt="">
+  </div>
+
+  <div class="controls">
+    <button onclick="prev()">Anterior</button>
+    <button onclick="next()">Siguiente</button>
+  </div>
+</main>
+
+<script>
+  const imgs=[...document.querySelectorAll("#car img")];
+  let i=0;
+  function show(n){
+    i=(n+imgs.length)%imgs.length;
+    imgs.forEach((im,k)=>im.classList.toggle("active",k===i));
+  }
+  function next(){show(i+1)}
+  function prev(){show(i-1)}
+</script>
+</body>
+</html>
