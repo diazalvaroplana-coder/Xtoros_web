@@ -1,95 +1,839 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<title>Xtoros</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{
-  margin:0;
-  font-family: Georgia, "Times New Roman", serif;
-  background:#fff;
-  color:#111;
-}
-header{
-  border-bottom:1px solid #ddd;
-  padding:20px;
-}
-nav a{
-  margin-right:15px;
-  text-decoration:none;
-  color:#111;
-  font-weight:600;
-}
-section{
-  max-width:1100px;
-  margin:auto;
-  padding:60px 20px;
-}
-h1,h2{
-  font-weight:500;
-}
-.gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:20px;
-}
-.card{
-  border:1px solid #ddd;
-  padding:15px;
-}
-footer{
-  border-top:1px solid #ddd;
-  padding:30px;
-  text-align:center;
-  font-size:14px;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Xtoros — Fotografía taurina</title>
+  <meta name="description" content="Xtoros — fotografía taurina. Galerías por festejo, crónicas, entrevistas y contacto." />
+
+  <!-- Tipografías (clásico + moderno) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300,400,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#0f0f10;
+      --muted:#5a5a60;
+      --line: rgba(15,15,16,.12);
+      --panel: rgba(255,255,255,.75);
+      --shadow: 0 18px 50px rgba(15,15,16,.08);
+      --radius: 18px;
+      --max: 1120px;
+
+      /* acento sobrio (oro apagado) */
+      --accent:#b79a57;
+      --accent2:#1a1a1c;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 420px at 15% -10%, rgba(183,154,87,.12), transparent 55%),
+        radial-gradient(760px 380px at 110% 0%, rgba(15,15,16,.06), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      line-height:1.55;
+      letter-spacing:.1px;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .container{ max-width:var(--max); margin:0 auto; padding:0 20px; }
+
+    /* Header */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:14px 0;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 220px;
+    }
+    .logo{
+      width:42px; height:42px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background:#fff;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 10px 25px rgba(15,15,16,.06);
+      overflow:hidden;
+    }
+    .logo img{ width:100%; height:100%; object-fit:contain; padding:6px; }
+    .brandText{ display:flex; flex-direction:column; line-height:1.05; }
+    .brandText strong{
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 600;
+      letter-spacing:.4px;
+      font-size:18px;
+    }
+    .brandText span{ font-size:12px; color:var(--muted); }
+
+    nav ul{
+      list-style:none;
+      display:flex;
+      gap:10px;
+      padding:0; margin:0;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    nav a{
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid transparent;
+      color: rgba(15,15,16,.88);
+      font-weight: 600;
+      font-size: 13px;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    nav a:hover{
+      background: rgba(15,15,16,.04);
+      border-color: rgba(15,15,16,.10);
+    }
+
+    .cta{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius: 14px;
+      border:1px solid rgba(15,15,16,.12);
+      background:#fff;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 10px 25px rgba(15,15,16,.05);
+      transition: transform .08s ease, box-shadow .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{ box-shadow: 0 16px 38px rgba(15,15,16,.08); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      border-color: rgba(183,154,87,.45);
+      background: linear-gradient(180deg, rgba(183,154,87,.15), rgba(183,154,87,.06));
+    }
+
+    /* Hero */
+    .hero{ padding: 56px 0 28px; }
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .card{
+      background: rgba(255,255,255,.72);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .heroMain{ padding: 28px 24px; }
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      color: rgba(15,15,16,.85);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+    .kickerDot{
+      width:8px; height:8px;
+      border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(183,154,87,.15);
+    }
+    h1{
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 600;
+      margin: 14px 0 10px;
+      font-size: 46px;
+      line-height: 1.06;
+      letter-spacing: .2px;
+    }
+    .lead{
+      margin: 0;
+      color: rgba(15,15,16,.78);
+      max-width: 66ch;
+      font-size: 15px;
+    }
+    .heroActions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+    .mini{
+      padding: 20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .miniBox{
+      border:1px solid rgba(15,15,16,.10);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255,255,255,.75);
+    }
+    .miniBox strong{
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .miniBox span{
+      display:block;
+      margin-top:6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Sections */
+    section{ padding: 36px 0; }
+    .sectionHead{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    .sectionHead h2{
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 600;
+      margin:0;
+      font-size: 28px;
+      letter-spacing:.2px;
+    }
+    .sectionHead p{ margin:0; color: var(--muted); font-size: 13px; max-width: 70ch; }
+
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    .panel{ padding: 18px; }
+
+    .divider{ height:1px; background: rgba(15,15,16,.10); margin:14px 0; }
+
+    /* Galleries list */
+    .collections{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; }
+    .colBtn{
+      text-align:left;
+      cursor:pointer;
+      background: #fff;
+      border:1px solid rgba(15,15,16,.12);
+      border-radius: 16px;
+      padding: 14px;
+      transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .colBtn:hover{
+      border-color: rgba(183,154,87,.45);
+      box-shadow: 0 16px 40px rgba(15,15,16,.08);
+      transform: translateY(-1px);
+    }
+    .colBtn strong{
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 600;
+      font-size: 17px;
+    }
+    .meta{ margin-top:6px; font-size:12px; color: var(--muted); }
+    .badge{
+      display:inline-flex;
+      margin-top:10px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(15,15,16,.12);
+      background: rgba(15,15,16,.03);
+      font-size:12px;
+      color: rgba(15,15,16,.85);
+      width: fit-content;
+    }
+
+    /* Carousel */
+    .carousel{
+      border-radius: 18px;
+      border:1px solid rgba(15,15,16,.12);
+      overflow:hidden;
+      background: #fff;
+      box-shadow: 0 16px 44px rgba(15,15,16,.08);
+    }
+    .carTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:10px 10px;
+      border-bottom:1px solid rgba(15,15,16,.10);
+      background: rgba(255,255,255,.85);
+    }
+    .carTitle{ font-size:12px; color: rgba(15,15,16,.78); }
+    .carBtns{ display:flex; gap:8px; }
+    .iconBtn{
+      width:38px; height:34px;
+      border-radius: 14px;
+      border:1px solid rgba(15,15,16,.12);
+      background:#fff;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .viewport{
+      position:relative;
+      aspect-ratio: 16/10;
+      background: rgba(15,15,16,.03);
+    }
+    .viewport img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:0;
+      transition: opacity .25s ease;
+    }
+    .viewport img.active{ opacity:1; }
+    .dots{
+      display:flex;
+      gap:6px;
+      justify-content:center;
+      flex-wrap:wrap;
+      padding: 10px;
+      border-top:1px solid rgba(15,15,16,.10);
+      background: rgba(255,255,255,.85);
+    }
+    .dot{
+      width:8px; height:8px;
+      border-radius: 999px;
+      border:1px solid rgba(15,15,16,.25);
+      background: transparent;
+      cursor:pointer;
+    }
+    .dot.active{
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Posts */
+    .posts{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; }
+    .postBtn{
+      text-align:left;
+      cursor:pointer;
+      background: #fff;
+      border:1px solid rgba(15,15,16,.12);
+      border-radius: 16px;
+      padding: 14px;
+      transition: box-shadow .15s ease, transform .08s ease, border-color .15s ease;
+    }
+    .postBtn:hover{
+      border-color: rgba(183,154,87,.45);
+      box-shadow: 0 16px 40px rgba(15,15,16,.08);
+      transform: translateY(-1px);
+    }
+    .postBtn h3{
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 600;
+      margin: 6px 0 8px;
+      font-size: 18px;
+    }
+    .excerpt{ margin:0; color: rgba(15,15,16,.78); font-size: 13px; }
+
+    .reader{
+      padding: 18px;
+      background: #fff;
+      border:1px solid rgba(15,15,16,.12);
+      border-radius: 18px;
+      box-shadow: 0 16px 44px rgba(15,15,16,.08);
+    }
+
+    /* Contact */
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    label{ font-size:12px; color: rgba(15,15,16,.72); font-weight: 600; }
+    input, textarea{
+      width:100%;
+      margin-top:6px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(15,15,16,.12);
+      background:#fff;
+      font-size: 13px;
+      outline:none;
+    }
+    textarea{ min-height: 120px; resize: vertical; }
+    input:focus, textarea:focus{ border-color: rgba(183,154,87,.55); box-shadow: 0 0 0 6px rgba(183,154,87,.12); }
+
+    footer{
+      padding: 30px 0 44px;
+      border-top:1px solid rgba(15,15,16,.10);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .heroGrid{ grid-template-columns: 1fr; }
+      .collections{ grid-template-columns: repeat(2, 1fr); }
+      .posts{ grid-template-columns: repeat(2, 1fr); }
+      .grid2{ grid-template-columns: 1fr; }
+      .row{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px){
+      h1{ font-size: 38px; }
+      nav ul{ gap:6px; }
+      nav a{ padding:10px 10px; }
+      .collections{ grid-template-columns: 1fr; }
+      .posts{ grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 
 <body>
-
 <header>
-  <strong>Xtoros</strong>
-  <nav>
-    <a href="#galerias">Galerías</a>
-    <a href="#cronicas">Crónicas</a>
-    <a href="#contacto">Contacto</a>
-    <a href="#sobre">Sobre mí</a>
-  </nav>
+  <div class="container nav">
+    <a class="brand" href="#inicio">
+      <div class="logo" aria-hidden="true">
+        <!-- Pon tu logo en el repo con este nombre: logoxtoros.png -->
+        <img src="logoxtoros.png" alt="Logo Xtoros">
+      </div>
+      <div class="brandText">
+        <strong>Xtoros</strong>
+        <span>Fotografía taurina · galerías · crónicas</span>
+      </div>
+    </a>
+
+    <nav>
+      <ul>
+        <li><a href="#galerias">Galerías</a></li>
+        <li><a href="#editorial">Crónicas</a></li>
+        <li><a href="#redes">Redes</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><a href="#sobre">Sobre mí</a></li>
+      </ul>
+    </nav>
+
+    <div class="cta">
+      <a class="btn primary" href="#galerias">Ver trabajo</a>
+    </div>
+  </div>
 </header>
 
-<section>
-  <h1>Fotografía taurina con mirada clásica</h1>
-  <p>Un enfoque sobrio y profesional del mundo taurino.</p>
-</section>
+<main>
+  <!-- HERO -->
+  <section id="inicio" class="hero">
+    <div class="container heroGrid">
+      <div class="card heroMain">
+        <div class="kicker"><span class="kickerDot"></span> XT O R O S</div>
+        <h1>Una mirada clásica con edición minimalista.</h1>
+        <p class="lead">
+          Galerías por festejo, selección cuidada y un espacio editorial para crónicas e entrevistas.
+          Diseño limpio y profesional, pensado para aficionados, prensa y marcas.
+        </p>
+        <div class="heroActions">
+          <a class="btn primary" href="#galerias">Galerías</a>
+          <a class="btn" href="#editorial">Crónicas e entrevistas</a>
+          <a class="btn" href="#contacto">Contacto</a>
+        </div>
+      </div>
 
-<section id="galerias">
-  <h2>Galerías</h2>
-  <div class="gallery">
-    <div class="card">Galería de ejemplo<br>15 fotos</div>
-    <div class="card">Galería de ejemplo<br>20 fotos</div>
-  </div>
-</section>
+      <aside class="card mini">
+        <div class="miniBox">
+          <strong>Galerías por día/festejo</strong>
+          <span>Carruseles sobrios, foco total en la fotografía.</span>
+        </div>
+        <div class="miniBox">
+          <strong>Editorial</strong>
+          <span>Crónicas, entrevistas y notas para compartir con público y empresas.</span>
+        </div>
+        <div class="miniBox">
+          <strong>Trabajo profesional</strong>
+          <span>Encargos, licencias, cobertura de festejos y colaboraciones.</span>
+        </div>
+      </aside>
+    </div>
+  </section>
 
-<section id="cronicas">
-  <h2>Crónicas y entrevistas</h2>
-  <p>Aquí se publicarán crónicas y entrevistas.</p>
-</section>
+  <!-- GALERÍAS -->
+  <section id="galerias">
+    <div class="container">
+      <div class="sectionHead">
+        <div>
+          <h2>Galerías</h2>
+          <p>Ejemplo visual. Luego lo conectamos a un panel para que puedas subir galerías tú mismo, gratis.</p>
+        </div>
+      </div>
 
-<section id="contacto">
-  <h2>Contacto</h2>
-  <p>Email: contacto@xtoros.com</p>
-</section>
+      <div class="grid2">
+        <div class="card panel">
+          <strong style="font-family:Fraunces,Georgia,serif; font-size:18px;">Colecciones</strong>
+          <div class="divider"></div>
+          <div class="collections" id="collections"></div>
+        </div>
 
-<section id="sobre">
-  <h2>Sobre mí</h2>
-  <p>Fotógrafo taurino con un enfoque clásico y editorial.</p>
-</section>
+        <div class="card panel">
+          <strong style="font-family:Fraunces,Georgia,serif; font-size:18px;">Carrusel</strong>
+          <div class="divider"></div>
+          <div id="carouselMount"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDITORIAL -->
+  <section id="editorial">
+    <div class="container">
+      <div class="sectionHead">
+        <div>
+          <h2>Crónicas e entrevistas</h2>
+          <p>Zona editorial con lectura cómoda. Luego podrás publicar desde un panel /admin.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card panel">
+          <strong style="font-family:Fraunces,Georgia,serif; font-size:18px;">Publicaciones</strong>
+          <div class="divider"></div>
+          <div class="posts" id="posts"></div>
+        </div>
+
+        <div class="card panel">
+          <strong style="font-family:Fraunces,Georgia,serif; font-size:18px;">Lector</strong>
+          <div class="divider"></div>
+          <div class="reader" id="reader">
+            <div class="meta" id="readerMeta">—</div>
+            <h3 style="font-family:Fraunces,Georgia,serif; margin:8px 0 10px;">Selecciona una publicación</h3>
+            <div id="readerBody" style="color:rgba(15,15,16,.82); font-size:14px;">
+              Aquí se abrirá el texto completo.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REDES -->
+  <section id="redes">
+    <div class="container">
+      <div class="sectionHead">
+        <div>
+          <h2>Redes sociales</h2>
+          <p>Botones limpios y discretos. Cambia los enlaces por los tuyos.</p>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn" href="#" id="ig">Instagram</a>
+          <a class="btn" href="#" id="x">X</a>
+          <a class="btn" href="#" id="yt">YouTube</a>
+          <a class="btn" href="#" id="fb">Facebook</a>
+          <a class="btn" href="#" id="tt">TikTok</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="container">
+      <div class="sectionHead">
+        <div>
+          <h2>Contacto</h2>
+          <p>Encargos, prensa, licencias, colaboración con marcas y cobertura de festejos.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card panel">
+          <strong style="font-family:Fraunces,Georgia,serif; font-size:18px;">Formulario</strong>
+          <div class="divider"></div>
+
+          <!-- Si luego lo publicas con Netlify, este formulario puede funcionar gratis -->
+          <form name="contacto" method="POST" data-netlify="true">
+            <input type="hidden" name="form-name" value="contacto" />
+
+            <div class="row">
+              <div>
+                <label>Nombre
+                  <input name="nombre" placeholder="Tu nombre" required>
+                </label>
+              </div>
+              <div>
+                <label>Email
+                  <input name="email" type="email" placeholder="tucorreo@dominio.com" required>
+                </label>
+              </div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <label>Asunto
+                <input name="asunto" placeholder="Propuesta / prensa / encargo" required>
+              </label>
+            </div>
+
+            <div style="margin-top:10px;">
+              <label>Mensaje
+                <textarea name="mensaje" placeholder="Cuéntame detalles: fecha, plaza, uso, plazos..." required></textarea>
+              </label>
+            </div>
+
+            <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn primary" type="submit">Enviar</button>
+              <a class="btn" href="#sobre">Ver bio</a>
+            </div>
+          </form>
+        </div>
+
+        <div class="card panel">
+          <strong style="font-family:Fraunces,Georgia,serif; font-size:18px;">Datos</strong>
+          <div class="divider"></div>
+          <p style="margin:0; color:rgba(15,15,16,.78); font-size:14px;">
+            <strong>Email:</strong> <a href="mailto:contacto@xtoros.com" style="text-decoration:underline; text-underline-offset:3px;">contacto@xtoros.com</a><br>
+            <strong>Servicios:</strong> Cobertura de festejos · prensa · licencias · marcas · editorial<br>
+            <strong>Zona:</strong> España y desplazamientos (a definir)
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE MI -->
+  <section id="sobre">
+    <div class="container">
+      <div class="sectionHead">
+        <div>
+          <h2>Sobre mí</h2>
+          <p>Breve, serio y convincente. Ajustaremos el texto con tus datos reales.</p>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <h3 style="font-family:Fraunces,Georgia,serif; margin:0 0 10px;">Xtoros</h3>
+        <p style="margin:0; color:rgba(15,15,16,.80); font-size:14px; max-width: 76ch;">
+          Fotografía taurina enfocada en gesto, composición y luz. Una estética clásica con edición contemporánea,
+          y criterio editorial para aficionados, medios y marcas.
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
 
 <footer>
-  © Xtoros
+  <div class="container foot">
+    <div>© <span id="year"></span> Xtoros · Fotografía taurina</div>
+    <div style="opacity:.9;">Portfolio · Galerías · Editorial</div>
+  </div>
 </footer>
 
+<script>
+  // Redes (pon aquí tus enlaces)
+  const socials = {
+    instagram: "", x: "", youtube: "", facebook: "", tiktok: ""
+  };
+  const setLink=(id,url)=>{
+    const a=document.getElementById(id);
+    if(!a) return;
+    if(url){ a.href=url; a.target="_blank"; a.rel="noopener"; }
+    else { a.href="#"; }
+  };
+  setLink("ig", socials.instagram);
+  setLink("x", socials.x);
+  setLink("yt", socials.youtube);
+  setLink("fb", socials.facebook);
+  setLink("tt", socials.tiktok);
+
+  // Galerías de ejemplo (para vista previa visual)
+  const galleries = [
+    {
+      id:"g1",
+      title:"Feria (ejemplo) · Tarde de triunfo",
+      date:"2026-02-10",
+      place:"Plaza de (ejemplo)",
+      images:[
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1520975958221-7f61d2f3f6d3?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1520975922138-7b7f7cbd89d5?auto=format&fit=crop&w=1600&q=80"
+      ]
+    },
+    {
+      id:"g2",
+      title:"Novillada (ejemplo) · Detalle y temple",
+      date:"2026-01-28",
+      place:"Plaza de (ejemplo)",
+      images:[
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1520975885888-6d0a9f0e3530?auto=format&fit=crop&w=1600&q=80"
+      ]
+    },
+    {
+      id:"g3",
+      title:"Festival benéfico (ejemplo)",
+      date:"2025-12-16",
+      place:"Plaza de (ejemplo)",
+      images:[
+        "https://images.unsplash.com/photo-1520975687642-3d4f6b1f0e38?auto=format&fit=crop&w=1600&q=80"
+      ]
+    }
+  ];
+
+  // Posts ejemplo
+  const posts = [
+    {
+      id:"p1",
+      type:"Crónica",
+      title:"Crónica de ejemplo: una tarde seria y medida",
+      date:"2026-02-10",
+      subtitle:"Entradilla breve con contexto y tono editorial.",
+      body:`**Aplomo, distancia y verdad.** La tarde se construyó desde el oficio.
+
+En esta sección publicarás crónicas e entrevistas con una lectura limpia, pensada para compartir con público y empresas.`
+    },
+    {
+      id:"p2",
+      type:"Entrevista",
+      title:"Entrevista de ejemplo: 'La plaza enseña'",
+      date:"2026-01-28",
+      subtitle:"Dos o tres frases que invitan a entrar.",
+      body:`En el panel podrás escribir entrevistas con estructura y ritmo.
+
+- Pregunta / respuesta
+- Contexto
+- Cierre con idea clara`
+    },
+    {
+      id:"p3",
+      type:"Artículo",
+      title:"Artículo de ejemplo: fotografía y selección",
+      date:"2025-12-16",
+      subtitle:"Por qué menos es más en un portfolio profesional.",
+      body:`Para empresas y marcas, una selección cuidada comunica mejor que un volumen enorme.`
+    }
+  ];
+
+  const fmt = (d)=>{
+    try{
+      const dd=new Date(d+"T00:00:00");
+      return new Intl.DateTimeFormat('es-ES',{day:'2-digit',month:'short',year:'numeric'}).format(dd);
+    }catch{return d}
+  };
+
+  const collectionsMount = document.getElementById("collections");
+  const carouselMount = document.getElementById("carouselMount");
+
+  function renderCollections(){
+    collectionsMount.innerHTML = galleries.map(g=>{
+      const count=g.images.length;
+      return `
+        <button class="colBtn" data-id="${g.id}">
+          <strong>${g.title}</strong>
+          <div class="meta">${fmt(g.date)} · ${g.place}</div>
+          <div class="badge">${count} foto${count===1?'':'s'}</div>
+        </button>
+      `;
+    }).join("");
+
+    document.querySelectorAll("[data-id]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const id=b.getAttribute("data-id");
+        const g=galleries.find(x=>x.id===id);
+        if(g) openCarousel(g);
+      });
+    });
+  }
+
+  function openCarousel(g){
+    const imgs=g.images;
+    const dots=imgs.map((_,i)=>`<button class="dot ${i===0?'active':''}" data-i="${i}"></button>`).join("");
+    const tags=imgs.map((src,i)=>`<img src="${src}" class="${i===0?'active':''}" alt="${g.title} — ${i+1}" loading="lazy">`).join("");
+
+    carouselMount.innerHTML = `
+      <div class="carousel">
+        <div class="carTop">
+          <div class="carTitle"><strong style="font-family:Fraunces,Georgia,serif">${g.title}</strong> · ${fmt(g.date)} · ${g.place}</div>
+          <div class="carBtns">
+            <button class="iconBtn" id="prev">‹</button>
+            <button class="iconBtn" id="next">›</button>
+          </div>
+        </div>
+        <div class="viewport" id="viewport">${tags}</div>
+        <div class="dots" id="dots">${dots}</div>
+      </div>
+    `;
+
+    let idx=0;
+    const images=[...document.querySelectorAll("#viewport img")];
+    const dotBtns=[...document.querySelectorAll("#dots .dot")];
+
+    const set=(i)=>{
+      idx=(i+images.length)%images.length;
+      images.forEach((im,k)=>im.classList.toggle("active",k===idx));
+      dotBtns.forEach((d,k)=>d.classList.toggle("active",k===idx));
+    };
+
+    document.getElementById("prev").onclick=()=>set(idx-1);
+    document.getElementById("next").onclick=()=>set(idx+1);
+    dotBtns.forEach(d=>d.onclick=()=>set(Number(d.getAttribute("data-i"))));
+  }
+
+  // Posts
+  const postsMount=document.getElementById("posts");
+  const readerMeta=document.getElementById("readerMeta");
+  const readerBody=document.getElementById("readerBody");
+  const readerTitle=document.querySelector("#reader h3");
+
+  function renderPosts(){
+    postsMount.innerHTML = posts.map(p=>{
+      const excerpt=(p.body||"").replace(/\n/g," ").slice(0,120);
+      return `
+        <button class="postBtn" data-post="${p.id}">
+          <div class="meta">${p.type} · ${fmt(p.date)}</div>
+          <h3>${p.title}</h3>
+          <p class="excerpt">${p.subtitle || (excerpt + (excerpt.length>=120?'…':''))}</p>
+        </button>
+      `;
+    }).join("");
+
+    document.querySelectorAll("[data-post]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const id=b.getAttribute("data-post");
+        const p=posts.find(x=>x.id===id);
+        if(p) openPost(p);
+      });
+    });
+  }
+
+  function mdSimple(md){
+    let t=(md||"")
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    t=t.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
+    t=t.replace(/\n\n/g,"</p><p style='margin:0 0 10px; color:rgba(15,15,16,.82)'>");
+    t=t.replace(/\n/g,"<br>");
+    return `<p style="margin:0 0 10px; color:rgba(15,15,16,.82)">${t}</p>`;
+  }
+
+  function openPost(p){
+    readerMeta.textContent = `${p.type} · ${fmt(p.date)}`;
+    readerTitle.textContent = p.title;
+    const sub = p.subtitle ? `<div style="color:rgba(183,154,87,.95); font-weight:700; margin:10px 0 10px">${p.subtitle}</div>` : "";
+    readerBody.innerHTML = sub + mdSimple(p.body);
+  }
+
+  // init
+  document.getElementById("year").textContent = new Date().getFullYear();
+  renderCollections();
+  openCarousel(galleries[0]);
+  renderPosts();
+  openPost(posts[0]);
+</script>
 </body>
 </html>
